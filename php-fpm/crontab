@@ -1,0 +1,1 @@
+* * * * * /usr/local/bin/php /var/www/wechat-library-backend/artisan schedule:run >> /dev/null 2>&1

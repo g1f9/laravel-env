@@ -41,11 +41,16 @@ RUN docker-php-ext-install zip \
     && pecl install -o -f redis \
         &&  rm -rf /tmp/pear \
         &&  docker-php-ext-enable redis
-
+RUN apt-get update -yqq && apt-get install cron -y
 RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer \
     && composer config -g repo.packagist composer https://packagist.phpcomposer.com 
+COPY ./crontab /var/spool/cron/crontabs/root
+RUN chmod 0644 /var/spool/cron/crontabs/root
+RUN crontab /var/spool/cron/crontabs/root
+COPY ./entrypoint.sh /usr/local/bin/
 
+ENTRYPOINT ["entrypoint.sh"]
 USER root
 
 # Clean up
